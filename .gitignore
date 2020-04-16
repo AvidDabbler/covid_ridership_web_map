@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # custom
-private.js
+.private.js
