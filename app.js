@@ -1,5 +1,5 @@
 import { loadModules } from "https://unpkg.com/esri-loader/dist/esm/esri-loader.js";
-import { agol as agol } from './ignore/private.js';
+import { agol as agol } from './private.js';
 
 // BUILD LIST OF ROUTES AND RIDERSHIPS FROM LIST OF ROUTES
 const ridershipPopup = (feature) => {
