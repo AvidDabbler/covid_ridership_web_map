@@ -26,32 +26,19 @@ const ridershipPopup = (feature) => {
 const main = async () => {
   // More info on esri-loader's loadModules function:
   // https://github.com/Esri/esri-loader#loading-modules-from-the-arcgis-api-for-javascript
-  const [Map, MapView, FeatureLayer, PieChartMediaInfo, ChartMediaInfoValue, MediaContent] = await loadModules(
-    ["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/PopupTemplate", "esri/popup/content/PieChartMediaInfo", "esri/popup/content/support/ChartMediaInfoValue", "esri/popup/content/MediaContent"],
+  const [MapView, WebMap, FeatureLayer, Search] = await loadModules(
+    ["esri/views/MapView", "esri/WebMap", "esri/layers/FeatureLayer", "esri/widgets/Search"],
     { css: true }
   );
-  
 
-
-  // MEDIA TEMPLATE
-  let pieChartValue = new ChartMediaInfoValue({
-    fields: ["AVG_BRD", "AVG_ALT"],
-    normalizeField: null,
+  var webmap = new WebMap({
+    portalItem: {
+      // autocasts as new PortalItem()
+      id: agol().mapid,
+    }
   });
   
-  // Create the PieChartMediaInfo media type
-  let pieChart = new PieChartMediaInfo({
-    title: "<b>Average Ridership Breakdown</b>",
-    value: pieChartValue
-  });
   
-  // Create the MediaContent
-  let mediaElement = new MediaContent({
-    mediaInfos: [pieChart]
-  });
-
-
-
   
   // STOPS RIDERSHIP LAYER
   const stops = new FeatureLayer({
@@ -59,33 +46,28 @@ const main = async () => {
     popupTemplate: {
       title: 'Stop ID: {stop_id}',
       content: ridershipPopup,
-      mediaInfos: pieChart,
     },
     outFields: ['*'],
   });
-
-  // RIDERSHIP HEATMAP LAYER
-  const heatmap = new FeatureLayer({
-    url: agol().heatmap,
-  });
-
-
-
-  // Map configuration
-  const map = new Map({
-    basemap: "streets",
-    layers: [heatmap, stops,]
-  });
+  
   const viewOptions = {
     container: "viewDiv",
-    map: map,
+    map: webmap,
     center: [-90.3, 38.6],
     zoom: 12
   };
+  webmap.add(stops);
   
-  let view = new MapView(viewOptions);
-
+  var view = new MapView({
+    map: webmap,
+    container: "viewDiv"
+  });
   
+    const search = new Search({
+      view: view,
+    });
+  
+  view.ui.add(search, "top-right");
 };
 main();
 

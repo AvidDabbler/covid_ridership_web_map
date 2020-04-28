@@ -6,15 +6,3 @@ body,
   height: 100%;
   width: 100%;
 }
-
-.countdownTimer {
-  position: absolute;
-  right: 10px;
-  bottom: 30px;
-  background-color: rgba(255,255,255,0.7);
-  z-index: 100;
-  text-align: center;
-  padding: 5px;
-  font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
-  min-width: 20px;
-}
